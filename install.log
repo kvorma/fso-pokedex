@@ -1,0 +1,18 @@
+npm warn cli npm v11.8.0 does not support Node.js v16.20.2. This version of npm supports the following node versions: `^20.17.0 || >=22.9.0`. You can find the latest version at https://nodejs.org/.
+npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+
+added 1103 packages, and audited 1104 packages in 59s
+
+165 packages are looking for funding
+  run `npm fund` for details
+
+31 vulnerabilities (6 low, 10 moderate, 14 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
