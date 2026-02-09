@@ -7,6 +7,8 @@
         - main
   
   jobs:
+    call-e2e-test:
+      uses: ./.github/workflows/playwright.yml
     test:
       name: Lint and test app
       runs-on: ubuntu-latest
@@ -25,7 +27,7 @@
           run: npm run test
 
     deploy:
-      needs: [test, e2e-test]
+      needs: [test, call-e2e-test]
       name: Deploy app
       runs-on: ubuntu-latest
       steps:
