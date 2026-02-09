@@ -16,6 +16,17 @@ primary_region = 'lax'
   min_machines_running = 0
   processes = ['app']
 
+[deploy]
+  strategy = "canary"
+
+[[http_service.checks]]
+  grace_period = "10s"
+  interval = "60s"
+  method = "GET"
+  timeout = "5s"
+  path = "/heal"
+
+
 [[vm]]
   memory = '256mb'
   cpus = 1
