@@ -4,7 +4,10 @@
   on:
     push:
       branches:
-        - main
+        - mein
+    pull_request:
+      branches: [main]
+      types: [opened, synchronize]
   
   jobs:
     call-e2e-test:
