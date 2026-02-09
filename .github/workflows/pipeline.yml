@@ -25,7 +25,7 @@
           run: npm run test
 
     deploy:
-      needs: test
+      needs: [test, e2e-test]
       name: Deploy app
       runs-on: ubuntu-latest
       steps:

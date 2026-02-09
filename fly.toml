@@ -24,7 +24,7 @@ primary_region = 'lax'
   interval = "60s"
   method = "GET"
   timeout = "5s"
-  path = "/heal"
+  path = "/health"
 
 
 [[vm]]
