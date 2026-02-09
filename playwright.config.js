@@ -14,7 +14,7 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
   testDir: './e2e-tests',
-  timeout: 30000,
+  timeout: 3000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -36,7 +36,7 @@ export default defineConfig({
   webServer: {
     command: 'npm run start',
     url: 'http://localhost:5050',
-    timeout: 60 * 1000,
+    timeout: 30 * 1000,
     reuseExistingServer: !process.env.CI,
   },
   /* Configure projects for major browsers */
