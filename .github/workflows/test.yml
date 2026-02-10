@@ -7,7 +7,6 @@ on:
 
 jobs:
   a_test_job:
-    if: contains(github.event.commits.*.message, '#skip')
     runs-on: ubuntu-latest
     
     steps:
