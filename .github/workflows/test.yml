@@ -8,9 +8,9 @@ on:
 jobs:
   a_test_job:
     runs-on: ubuntu-latest
-    
+    if: ! ${{ contains(toJSON(github.event.commits.*.message), '#skip') }}
     steps:
       - name: skip truthy
         run: echo ${{ contains(toJSON(github.event.commits.*.message), '#skip') }}
       - name: skip message
-        run: echo ${{ toJSON(github.event.commits.*.message) }}
+        run: echo "${{ toJSON(github.event.commits.*.message) }}"
