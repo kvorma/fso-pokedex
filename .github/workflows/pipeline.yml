@@ -1,9 +1,6 @@
 # Full Stack Open exercise 11.5 -
   name: Deployment pipeline
 
-  env: 
-    deliver: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
-
   on:
     push:
       branches:
@@ -11,7 +8,10 @@
     pull_request:
       branches: [main]
       types: [opened, synchronize]
-  
+
+  env: 
+  deliver: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
+    
   jobs:
     call-e2e-test:
       uses: ./.github/workflows/playwright.yml
