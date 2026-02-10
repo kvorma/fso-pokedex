@@ -22,3 +22,7 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: skip
+        if: contains(github.event.commits.*.message, '#skip')
+        run: echo "Skippin deployment requested"
+        run: echo ${{ github.event.commits.*.message }}
