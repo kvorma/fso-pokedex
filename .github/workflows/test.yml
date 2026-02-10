@@ -12,5 +12,7 @@ jobs:
     steps:
       - name: skip truthy
         run: echo ${{ contains(toJSON(github.event.commits.*.message), '#skip') }}
-      - name: skip message
-        run: echo "${{ toJSON(github.event.commits.*.message) }}"
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
