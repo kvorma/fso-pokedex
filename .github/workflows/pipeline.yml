@@ -30,6 +30,7 @@
           run: npm run test
 
     deploy:
+      if: ${{ github.event_name == 'push' }}
       needs: [test, call-e2e-test]
       name: Deploy app
       runs-on: ubuntu-latest
