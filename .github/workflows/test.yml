@@ -11,4 +11,4 @@ jobs:
     
     steps:
       - name: skip message
-        run: echo ${{ github.event.commits.*.message }}
+        run: echo ${{ contains(github.event.commits.*.message, '#skip') }}
