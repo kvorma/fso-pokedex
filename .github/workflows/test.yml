@@ -10,5 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: skip truthy
+        run: echo ${{ contains(toJSON(github.event.commits.*.message), '#skip') }}
       - name: skip message
-        run: echo ${{ contains(github.event.commits.*.message, '#skip') }}
+        run: echo ${{ toJSON(github.event.commits.*.message) }}
