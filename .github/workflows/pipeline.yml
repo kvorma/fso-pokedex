@@ -1,6 +1,9 @@
 # Full Stack Open exercise 11.5 -
   name: Deployment pipeline
 
+  env: 
+    DEPLOY: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
+
   on:
     push:
       branches:
@@ -30,7 +33,7 @@
           run: npm run test
 
     deploy:
-      if: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
+      if: ${{ env.DEPLOY == 'true' }}
       needs: [test, call-e2e-test]
       name: Deploy app
       runs-on: ubuntu-latest
@@ -42,7 +45,7 @@
             FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
     tag_release:
-      if: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
+      if: ${{ env.DEPLOY == 'true' }}
       needs: [deploy]
       runs-on: ubuntu-latest
       steps:
