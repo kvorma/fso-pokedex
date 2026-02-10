@@ -24,7 +24,7 @@
 - do you prefer OPEX over CAPEX?
 - do you have the expertize to manage CI/CD pipeline?
 - security demands from customers / goverments
-- etc.
+- ethical considerations (AI mining, host country legal/laws)
 - in general, if you are small and fast go cloud whereas large organization have often resources to self host for better control
 - Hybrid tools are available and should be considered
 

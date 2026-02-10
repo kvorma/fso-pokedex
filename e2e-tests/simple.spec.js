@@ -12,5 +12,10 @@ describe('Pokedex', () => {
     await page.getByText('kakuna').click()
     await page.waitForURL('**/kakuna')
     await expect(page.getByText('Shed Skin')).toBeVisible()
+    await page.getByRole('link', { name: 'Previous' }).click()
+    // weedle
+    await expect(page.getByText('Run Away')).toBeVisible()
+    await page.getByRole('link', { name: 'Home' }).click()
+    await expect(page.getByText('Pokémon and Pokémon character names are trademarks of Nintendo.')).toBeVisible()
   })
 })
