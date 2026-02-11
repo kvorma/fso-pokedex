@@ -37,6 +37,6 @@ jobs:
   tag_release:
     needs: [evars, deploy]
     name: tag ${{needs.evars.outputs.deploy}}
-    if: needs.evars.outputs.deploy == 'true'
+    if: needs.evars.outputs.deploy == true
     uses: ./.github/workflows/tag_release.yml
     
