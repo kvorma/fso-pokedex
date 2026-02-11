@@ -22,7 +22,9 @@ jobs:
   deploy:    
     needs: [unit-test, e2e-test]
     uses: ./.github/workflows/fly-deploy.yml
-
+    secrets: 
+      token: ${{ secrets.FLY_API_TOKEN }}
+  
   tag_release:
     needs: [deploy]
     uses: ./.github/workflows/tag_release.yml
