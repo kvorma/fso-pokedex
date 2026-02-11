@@ -1,5 +1,5 @@
 # Full Stack Open exercise 11.5 -
-  name: pipeline for fso-pokedex
+name: pipeline for fso-pokedex
 
 on:
   push:
