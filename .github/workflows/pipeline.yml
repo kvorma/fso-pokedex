@@ -36,7 +36,7 @@ jobs:
       token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
-    needs: [env_var, deploy]
+    needs: env_var
     name: tag if ${{ needs.env_var.outputs.deploy }}
     if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/tag_release.yml
@@ -46,8 +46,14 @@ jobs:
     name: Notify ${{ needs.tag_release.outputs.tag }} deployed
     runs-on: ubuntu-latest
     steps:
-    - uses: sarisia/actions-status-discord@v1
-      with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        username: vodedex build bot
-        title: pokedex version ${{ needs.tag_release.outputs.tag }} deployed
+    - uses: actions/checkout@v4
+    - name: tag_release outputs
+      env:
+        OUTPUT: ${{ toJson(needs.tag_release.outputs) }}
+      run: echo "$OUTPUT"
+
+ #     - uses: sarisia/actions-status-discord@v1
+ #     with:
+ #       webhook: ${{ secrets.DISCORD_WEBHOOK }}
+ #       username: vodedex build bot
+ #       title: pokedex version ${{ needs.tag_release.outputs.tag }} deployed
