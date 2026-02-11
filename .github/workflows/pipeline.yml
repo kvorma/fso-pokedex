@@ -42,8 +42,8 @@ jobs:
     uses: ./.github/workflows/tag_release.yml
 
   notify:
-    needs: [deploy, tag_release]
-    name: Send build notification to Discord
+    needs: unit-test
+    name: Send successfull build notification to Discord
     runs-on: ubuntu-latest
     steps:
     - uses: rjstone/discord-webhook-notify@v2
