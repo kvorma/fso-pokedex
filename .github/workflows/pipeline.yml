@@ -36,23 +36,22 @@ jobs:
       token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
-    needs: env_var
+    needs: [env_var, deploy]
     name: tag if ${{ needs.env_var.outputs.deploy }}
-    if: true || needs.env_var.outputs.deploy == 'true'
+    if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/tag_release.yml
 
   notify:
-    needs: tag_release
-    name: Notify ${{ needs.tag_release.outputs.tag }} deployed
+    if: always()
+    needs: deploy
+    name: send build notification to Discord
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: tag_release outputs
-      env:
-        OUTPUT: ${{ toJson(needs.tag_release) }}
-      run: echo "$OUTPUT"
+    - uses: ./.github/workflows/echo.yml
+      with:
+        title: a new build released
 
- #     - uses: sarisia/actions-status-discord@v1
+ #   - uses: sarisia/actions-status-discord@v1
  #     with:
  #       webhook: ${{ secrets.DISCORD_WEBHOOK }}
  #       username: vodedex build bot
