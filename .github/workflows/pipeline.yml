@@ -29,13 +29,14 @@ jobs:
 
   deploy:    
     needs: [evars, unit-test, e2e-test]
-    if: needs.evars.outputs.deploy
+    if: false
     uses: ./.github/workflows/fly-deploy.yml
     secrets: 
       token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
     needs: [evars, deploy]
-    if: false
+    name: tag if ${{needs.evars.outputs.deploy}}
+    if: needs.evars.outputs.deploy == 'true'
     uses: ./.github/workflows/tag_release.yml
     
