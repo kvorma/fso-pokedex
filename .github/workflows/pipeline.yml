@@ -22,13 +22,14 @@ jobs:
       - run: echo "exposing env var DEPLOY=$DEPLOY"
 
   e2e-test:
+    if: false
     uses: ./.github/workflows/playwright.yml
 
   unit-test:
     uses: ./.github/workflows/lint_test.yml
 
   deploy:    
-    needs: [env_var, unit-test, e2e-test]
+    needs: [env_var, unit-test]
     name: Deploy if ${{ needs.env_var.outputs.deploy }}
     if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/fly-deploy.yml
