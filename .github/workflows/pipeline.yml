@@ -13,7 +13,7 @@ env:
   DEPLOY: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
   
 jobs:
-  env_var:
+  env_var: # workaround for env not being available in job context
     name: Expose DEPLOY to job context
     runs-on: ubuntu-latest
     outputs:
