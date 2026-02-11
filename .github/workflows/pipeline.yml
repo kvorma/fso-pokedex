@@ -43,7 +43,7 @@ jobs:
 
   notify:
     needs: tag_release
-    name: Send successfull build notification to Discord
+    name: Notify ${{ needs.tag_release.outputs.tag }} deployed
     runs-on: ubuntu-latest
     steps:
     - uses: sarisia/actions-status-discord@v1
