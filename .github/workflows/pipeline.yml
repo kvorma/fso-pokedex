@@ -13,7 +13,7 @@ env:
   DEPLOY: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
   
 jobs:
-  evars:
+  env_var:
     name: Expose DEPLOY to job context
     runs-on: ubuntu-latest
     outputs:
@@ -28,15 +28,15 @@ jobs:
     uses: ./.github/workflows/lint_test.yml
 
   deploy:    
-    needs: [evars, unit-test, e2e-test]
+    needs: [env_var, unit-test, e2e-test]
     if: false
     uses: ./.github/workflows/fly-deploy.yml
     secrets: 
       token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
-    needs: [evars, deploy]
-    name: tag if ${{needs.evars.outputs.deploy}}
-    if: ${{ needs.evars.outputs.deploy == 'true' || always()}}
+    needs: [env_var, deploy]
+    name: tag if ${{ toJSON(needs.env_var.outputs) }}
+    if: ${{ needs.env_var.outputs.deploy == 'true' }}
     uses: ./.github/workflows/tag_release.yml
     
