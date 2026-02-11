@@ -46,9 +46,8 @@ jobs:
     name: Send successfull build notification to Discord
     runs-on: ubuntu-latest
     steps:
-    - uses: rjstone/discord-webhook-notify@v2
-      with:
-        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-        username: vodedex build bot
-        severity: info
-        details: New build releases succesfully.
+      - uses: actions/checkout@v2
+      - name: Run Discord Webhook
+        uses: johnnyhuy/actions-discord-git-webhook@main
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
