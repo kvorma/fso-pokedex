@@ -13,6 +13,14 @@ env:
   DEPLOY: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
   
 jobs:
+  evar:
+    name: Expose DEPLOY to job context
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ env.DEPLOY }}
+    steps:
+      - run: echo "exposing env var DEPLOY=$DEPLOY"
+
   e2e-test:
     uses: ./.github/workflows/playwright.yml
 
@@ -20,12 +28,14 @@ jobs:
     uses: ./.github/workflows/lint_test.yml
 
   deploy:    
-    needs: [unit-test, e2e-test]
+    needs: [evar, unit-test, e2e-test]
+    if: needs.evar.outputs.deploy
     uses: ./.github/workflows/fly-deploy.yml
     secrets: 
       token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
-    needs: [deploy]
+    needs: [evar, deploy]
+    if: false
     uses: ./.github/workflows/tag_release.yml
     
