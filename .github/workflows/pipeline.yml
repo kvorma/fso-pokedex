@@ -1,56 +1,43 @@
 # Full Stack Open exercise 11.5 -
   name: pipeline for fso-pokedex
 
-  on:
-    push:
-      branches:
-        - main
-    pull_request:
-      branches: [main]
-      types: [opened, synchronize]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+env: 
+  DEPLOY: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
   
-  jobs:
-    call-e2e-test:
-      uses: ./.github/workflows/playwright.yml
-    test:
-      name: Lint and test app
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-node@v4
-          with:
-            node-version: '20'
-        - name: Install dependencies
-          run: npm install
-        - name: Lint
-          run: npm run eslint
-        - name: Build
-          run: npm run build
-        - name: Test
-          run: npm run test
+jobs:
+  env_var: # workaround for env not being available in job context
+    name: Expose DEPLOY to job context
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ env.DEPLOY }}
+    steps:
+      - run: echo "exposing env var DEPLOY=$DEPLOY"
 
-    deploy:
-      if: ${{ github.event_name == 'push' }}
-      needs: [test, call-e2e-test]
-      name: Deploy app
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: superfly/flyctl-actions/setup-flyctl@master
-        - run: flyctl deploy --remote-only
-          env:
-            FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  e2e-test:
+    uses: ./.github/workflows/playwright.yml
 
-    tag_release:
-      if: ${{ github.event_name == 'push' }}
-      needs: [deploy]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: "0"
-        - name: Bump version and push tag
-          uses: anothrNick/github-tag-action@1.75.0
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            DEFAULT_BUMP: patch
+  unit-test:
+    uses: ./.github/workflows/lint_test.yml
+
+  deploy:    
+    needs: [env_var, unit-test, e2e-test]
+    name: Deploy if ${{ needs.env_var.outputs.deploy }}
+    if: needs.env_var.outputs.deploy == 'true'
+    uses: ./.github/workflows/fly-deploy.yml
+    secrets: 
+      token: ${{ secrets.FLY_API_TOKEN }}
+  
+  tag_release:
+    needs: [env_var, deploy]
+    name: tag if ${{ needs.env_var.outputs.deploy }}
+    if: needs.env_var.outputs.deploy == 'true'
+    uses: ./.github/workflows/tag_release.yml
+    
