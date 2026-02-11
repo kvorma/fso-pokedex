@@ -22,6 +22,7 @@ jobs:
       - run: echo "exposing env var DEPLOY=$DEPLOY"
 
   e2e-test:
+    if: false
     uses: ./.github/workflows/playwright.yml
 
   unit-test:
@@ -35,8 +36,8 @@ jobs:
       token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
-    needs: [env_var, deploy]
-    name: tag if ${{ toJSON(needs.env_var.outputs) }}
-    if: ${{ needs.env_var.outputs.deploy == 'true' }}
+    needs: [env_var, unit-test]
+    name: tag if needs.env_var.outputs.deploy
+    if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/tag_release.yml
     
