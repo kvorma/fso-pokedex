@@ -10,50 +10,20 @@ on:
     types: [opened, synchronize]
 
 env: 
-  deliver: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
+  DEPLOY: ${{ github.event_name == 'push' && ! contains(toJSON(github.event.commits.*.message), '#skip') }}
   
 jobs:
-  call-e2e-test:
+  e2e-test:
     uses: ./.github/workflows/playwright.yml
-  test:
-    name: Lint and test app
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install dependencies
-        run: npm install
-      - name: Lint
-        run: npm run eslint
-      - name: Build
-        run: npm run build
-      - name: Test
-        run: npm run test
 
-  deploy:
-    if: env.deliver == 'true' 
-    needs: [test, call-e2e-test]
-    name: Deploy app
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  unit-test:
+    uses: ./.github/workflows/lint_test.yml
+
+  deploy:    
+    needs: [unit-test, e2e-test]
+    uses: ./.github/workflows/fly-deploy.yml
 
   tag_release:
-    if: env.deliver == 'true'
     needs: [deploy]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.75.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
+    uses: ./.github/workflows/tag_release.yml
+    
