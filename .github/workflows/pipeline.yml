@@ -42,8 +42,7 @@ jobs:
     uses: ./.github/workflows/tag_release.yml
 
   notify:
-    if: always()
-    needs: deploy
+    needs: tag_release
     name: Send successfull build notification to Discord
     runs-on: ubuntu-latest
     steps:
@@ -51,3 +50,4 @@ jobs:
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
         username: vodedex build bot
+        title: pokedex version ${{ needs.tag_release.outputs.tag }} deployed
