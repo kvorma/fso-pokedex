@@ -49,7 +49,7 @@ jobs:
     steps:
     - uses: sarisia/actions-status-discord@v1
       with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        webhook: ${{ secrets.DISCORD_WEBHOOK_NOT }}
         username: vodedex build bot
         title: New pokedex version deployed
         description: Go and grab some coffee
