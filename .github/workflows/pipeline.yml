@@ -34,7 +34,7 @@ jobs:
     if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/fly-deploy.yml
     secrets: 
-      token: ${{ secrets.FLY_API_TOKEN }}
+      token: ${{ secrets.FLY_API_TOKENN }}
   
   tag_release:
     needs: [env_var, deploy]
