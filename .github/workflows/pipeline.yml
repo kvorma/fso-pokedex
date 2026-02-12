@@ -34,7 +34,7 @@ jobs:
     if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/fly-deploy.yml
     secrets: 
-      token: ${{ secrets.FLY_API_TOKEN }}
+      token: ${{ secrets.FLY_API_TOKEN_NOT }}
   
   tag_release:
     needs: [env_var, deploy]
@@ -49,7 +49,7 @@ jobs:
     steps:
     - uses: sarisia/actions-status-discord@v1
       with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK_NOT }}
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
         username: vodedex build bot
         title: New pokedex version deployed
         description: Go and grab some coffee
