@@ -52,6 +52,7 @@ jobs:
 
   notify_failure:
     if: failure()
+    needs: deploy
     name: send build failure notification to Discord
     uses: ./.github/workflows/echo.yml
     with:
