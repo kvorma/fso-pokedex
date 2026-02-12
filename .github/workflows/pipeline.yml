@@ -42,8 +42,7 @@ jobs:
     if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/tag_release.yml
 
-  notify:
-    if: always()
+  notify_success:
     needs: deploy
     name: send build notification to Discord
     uses: ./.github/workflows/echo.yml
@@ -51,6 +50,13 @@ jobs:
       title: SUCCESS
       description: Go and grab some coffee
 
+  notify_failure:
+    if: failure()
+    name: send build failure notification to Discord
+    uses: ./.github/workflows/echo.yml
+    with:
+      title: FAILURE
+      description: Go and fix the build
     
  #   - uses: sarisia/actions-status-discord@v1
  #     with:
