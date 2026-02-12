@@ -46,13 +46,12 @@ jobs:
     if: always()
     needs: deploy
     name: send build notification to Discord
-    runs-on: ubuntu-latest
-    steps:
-    - uses: ./.github/workflows/echo.yml
-      with:
-        title: SUCCESS
-        description: Go and grab some coffee
+    uses: ./.github/workflows/echo.yml
+    with:
+      title: SUCCESS
+      description: Go and grab some coffee
 
+    
  #   - uses: sarisia/actions-status-discord@v1
  #     with:
  #       webhook: ${{ secrets.DISCORD_WEBHOOK }}
