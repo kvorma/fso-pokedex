@@ -1,4 +1,4 @@
-# Full Stack Open exercise 11.5 -
+# Full Stack Open exercise 11.18
 name: fso-pokedex-pipe
 
 on:
@@ -22,19 +22,18 @@ jobs:
       - run: echo "exposing env var DEPLOY=$DEPLOY"
 
   e2e-test:
-    if: false
     uses: ./.github/workflows/playwright.yml
 
   unit-test:
     uses: ./.github/workflows/lint_test.yml
 
   deploy:    
-    needs: [env_var, unit-test]
+    needs: [env_var, unit-test, e2e-test]
     name: Deploy if ${{ needs.env_var.outputs.deploy }}
     if: needs.env_var.outputs.deploy == 'true'
     uses: ./.github/workflows/fly-deploy.yml
     secrets: 
-      token: ${{ secrets.FLY_API_TOKEN_NOT }}
+      token: ${{ secrets.FLY_API_TOKEN }}
   
   tag_release:
     needs: [env_var, deploy]
